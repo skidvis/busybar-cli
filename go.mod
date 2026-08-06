@@ -1,4 +1,4 @@
-module github.com/skidvis/busybar
+module github.com/skidvis/busybar-cli
 
 go 1.26.5
 

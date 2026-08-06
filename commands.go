@@ -15,6 +15,9 @@ import (
 
 var inputKeys = []string{"up", "down", "ok", "back", "start", "busy", "custom", "off", "apps", "settings"}
 
+// Everything on the device's filesystem lives under /ext; "/" is rejected.
+const storageRoot = "/ext"
+
 // readJSONArg reads JSON from a literal string, an @file path, or - for stdin.
 func readJSONArg(value string) (any, error) {
 	var (
@@ -274,10 +277,11 @@ func storageCmd() *cobra.Command {
 	var long bool
 	ls := &cobra.Command{
 		Use:   "ls [path]",
-		Short: "list a directory",
+		Short: "list a directory (storage root is /ext)",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: run(func(c *Client, _ *cobra.Command, args []string) (any, error) {
-			path := "/"
+			// openapi.yaml: path is ^/ext(/[a-zA-Z0-9._\-]*)*$ - "/" is a 400.
+			path := storageRoot
 			if len(args) == 1 {
 				path = args[0]
 			}
@@ -348,7 +352,7 @@ func storageCmd() *cobra.Command {
 			if err != nil {
 				return nil, err
 			}
-			remote := "/" + filepath.Base(args[0])
+			remote := storageRoot + "/" + filepath.Base(args[0])
 			if len(args) == 2 {
 				remote = args[1]
 			}

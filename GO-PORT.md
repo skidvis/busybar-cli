@@ -176,7 +176,8 @@ POST   /assets/upload?file=<name>&application_name=  (raw bytes)  assets upload
 DELETE /assets/upload?application_name=                          assets delete
 ```
 
-**Storage**
+**Storage** — every path is under **`/ext`** (`^/ext(/[a-zA-Z0-9._\-]*)*$`).
+`busybar.py` defaults `storage ls` to `/`, which is a 400.
 ```
 GET    /storage/list?path=          storage ls
 GET    /storage/read?path=          storage get      (bytes)

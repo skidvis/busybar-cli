@@ -2,7 +2,7 @@
 # Install the busybar CLI.  curl -fsSL <url>/install.sh | sh
 set -e
 
-REPO="${BUSYBAR_REPO:-skidvis/busybar}"
+REPO="${BUSYBAR_REPO:-skidvis/busybar-cli}"
 VERSION="${BUSYBAR_VERSION:-latest}"
 
 os=$(uname -s | tr '[:upper:]' '[:lower:]')

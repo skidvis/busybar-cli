@@ -481,3 +481,15 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# content below: Go / busybar-cli
+busybar
+busybar.exe
+dist/
+*.test
+*.out
+
+# screenshots written by `busybar display screenshot`
+/screenshot.png
+/front.png
+/back.png
