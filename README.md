@@ -7,8 +7,16 @@ Go port of `busybar.py` — same endpoint coverage, one static executable.
 curl -fsSL https://raw.githubusercontent.com/skidvis/busybar-cli/main/install.sh | sh
 ```
 
-or `go install github.com/skidvis/busybar-cli@latest`, or grab a release archive
-(macOS Intel/Apple Silicon, Linux x86_64/ARM64, Windows x86_64).
+That drops a `busybar` binary in `/usr/local/bin`, or `~/.local/bin` if the
+former isn't writable.
+
+Or grab a release archive (macOS Intel/Apple Silicon, Linux x86_64/ARM64,
+Windows x86_64) and put the `busybar` inside it somewhere on your `PATH`.
+
+Or `go install github.com/skidvis/busybar-cli@latest` — that one names the
+binary after the module, so you get `busybar-cli`; rename it if you want the
+shorter name this README uses. It works fine either way, the name is only ever
+what you type.
 
 On Windows use the `.zip` — the Linux build is an ELF binary and Git Bash / MSYS2
 can only exec Windows executables. WSL2 runs the Linux build fine, but its NAT

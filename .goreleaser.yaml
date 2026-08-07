@@ -1,5 +1,9 @@
 version: 2
 
+# Without this, both the binary and the archives take the repo name
+# (busybar-cli).  The command is invoked as "busybar" everywhere.
+project_name: busybar
+
 builds:
   - env: [CGO_ENABLED=0]
     goos: [darwin, linux, windows]

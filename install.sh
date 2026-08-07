@@ -26,13 +26,28 @@ num=${VERSION#v}
 if [ -w /usr/local/bin ] 2>/dev/null; then dest=/usr/local/bin; else dest="$HOME/.local/bin"; fi
 mkdir -p "$dest"
 
-url="https://github.com/$REPO/releases/download/$VERSION/busybar_${num}_${os}_${arch}.tar.gz"
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 
+# Archives are named after the goreleaser project.  That is "busybar" as of
+# v0.1.1; v0.1.0 and earlier used the repo name, so fall back to it.
 echo "downloading busybar $VERSION ($os/$arch)"
-curl -fsSL "$url" | tar -xz -C "$tmp"
-install -m 0755 "$tmp/busybar" "$dest/busybar"
+base="https://github.com/$REPO/releases/download/$VERSION"
+for name in busybar "${REPO#*/}"; do
+  url="$base/${name}_${num}_${os}_${arch}.tar.gz"
+  # Not piped into tar: bsdtar exits 0 on empty input, hiding a 404 from curl.
+  curl -fsSL -o "$tmp/archive.tar.gz" "$url" 2>/dev/null && break
+  url=
+done
+[ -n "$url" ] || { echo "no release archive for $os/$arch at $base" >&2; exit 1; }
+tar -xzf "$tmp/archive.tar.gz" -C "$tmp"
+
+# The binary inside carries the same name as the archive.
+if   [ -f "$tmp/busybar" ];      then bin="$tmp/busybar"
+elif [ -f "$tmp/${REPO#*/}" ];   then bin="$tmp/${REPO#*/}"
+else echo "no busybar binary in $url" >&2; exit 1
+fi
+install -m 0755 "$bin" "$dest/busybar"
 
 echo "installed $dest/busybar"
 case ":$PATH:" in
