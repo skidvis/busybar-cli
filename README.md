@@ -10,6 +10,11 @@ curl -fsSL https://raw.githubusercontent.com/skidvis/busybar-cli/main/install.sh
 or `go install github.com/skidvis/busybar-cli@latest`, or grab a release archive
 (macOS Intel/Apple Silicon, Linux x86_64/ARM64, Windows x86_64).
 
+On Windows use the `.zip` — the Linux build is an ELF binary and Git Bash / MSYS2
+can only exec Windows executables. WSL2 runs the Linux build fine, but its NAT
+usually can't reach the bar's USB address, so from WSL you want Wi-Fi or cloud
+mode (or `networkingMode=mirrored` in `.wslconfig`).
+
 ## Quick start
 
 Plug the bar in over USB and it answers on `10.0.4.20` with no auth:
@@ -283,7 +288,17 @@ go build -o busybar .
 go test ./...
 ```
 
-No cgo, one dependency (cobra). Releases are cut with GoReleaser on a tag.
+No cgo, one dependency (cobra).
+
+Releases are cut by GoReleaser from `.github/workflows/release.yml`, triggered by
+pushing a version tag:
+
+```sh
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+Tests run first, then every platform archive plus `checksums.txt` is attached to
+the GitHub release and the changelog is generated from commits.
 
 ## The spec
 
